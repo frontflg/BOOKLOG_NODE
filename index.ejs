@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>読書履歴管理 Node.js版</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+  <a href="./add">追加</a>
+  <table>
+  <% if (!page) { page = 0; } %>
+  <% var itemFrom = page * 12; %>
+  <% var itemTo = itemFrom + 12; %>
+  <tr>
+    <% for(let i in content) { %>
+      <% if ((i >= itemFrom) && (i < itemTo)){ %>
+        <% let obj = content[i]; %>
+        <td>
+          <% let rsrt = obj.coverimg.indexOf('._'); %>
+          <% let srcImg = 'https://images-na.ssl-images-amazon.com/images/I/' + obj.coverimg.substr(0,rsrt) + '._AC_UL320_SR256,320_.jpg'; %>
+          <% if (page > 0){ %>
+            <a href="./edit?isbn13=<%= obj.isbn13 %>&page=<%= page %>"><img src="<%= srcImg %>" width="170" title="<%= obj.bookname %>"></a>
+          <% } else { %>
+            <a href="./edit?isbn13=<%= obj.isbn13 %>"><img src="<%= srcImg %>" width="170" title="<%= obj.bookname %>"></a>
+          <% } %>
+        </td>
+        <% if(i % 6 == 5 ){ %></tr><% } %>
+      <% } %>
+    <% } %>
+    </tr>
+  </table>
+  <% if (page > 0){ %>
+    <a href="./?page=<%= (parseInt(page) - 1) %>">≪前の12件へ</a>　
+  <% } %>
+  <% if (page * 12 + 12 < content.length){ %>
+    <a href="./?page=<%= (parseInt(page) + 1) %>">後の12件へ≫</a>
+  <% } %>
+</body>
+</html>
