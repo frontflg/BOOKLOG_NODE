@@ -34,7 +34,7 @@
       <tr>
         <td>ISBN13：<input type="hidden" name="isbn13" value="<%= isbn13 %>"><%= isbn13 %></td>
         <td><a href="https://www.amazon.co.jp/dp/<%= isbn10 %>" target="_blank">ISBN10</a>：<input type="number" name="isbn10" id="isbn10" value="<%= isbn10 %>" maxlength="10" size="12" pattern="^[0-9]*$"></td>
-        <td colspan="2"><a href="#" onclick="getImg ();">画像</a>：<input type="text" name="coverimg" id="coverimg" value="<%= coverimg %>" maxlength="41" size="49"></td></tr>
+        <td colspan="2">画像：<input type="text" name="coverimg" id="coverimg" value="<%= coverimg %>" maxlength="41" size="49"></td></tr>
       <tr>
         <td colspan="2">書名：<input type="text" name="bookname" id="bookname" value="<%= bookname %>" maxlength="50" size="64" required></td>
         <td>状況：<select name="state">
