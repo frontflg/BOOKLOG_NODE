@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <title>読書履歴管理 更新・削除</title>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -29,7 +28,6 @@
   };
 </script>
 </head>
-
 <body>
   <form action="./edit" method="post" style="display: inline">
     <table class="table">
@@ -90,67 +88,5 @@
     <input type="hidden" name="isbn13" value="<%= isbn13 %>">
     <button type="submit" class="btn btn-danger">削除</button>
   </form>
-
-<script>
-  function getImg () {
- // isbn10 = $('#isbn10').val();
- // if (isbn10 == '') { return; }
- // if (isbn10 == '4000000000') { return; }
- // var targetURL = "ajax.php?url='https://www.amazon.co.jp/dp/" + isbn10 + "'";
- // var targetURL = 'https://www.amazon.co.jp/dp/' + isbn10;
- // isbn13 = $('#isbn13').val();
- // var targetURL = 'http://www.s-book.net/plsql/slib_detail?isbn=' + '9784845851423';
- // var targetURL = 'http://webcatplus.nii.ac.jp/webcatplus/details/book/3939629.html'
-    var targetURL = 'https://honto.jp/netstore/pd-book_29448708.html'
-    // 国会図書館APIを使って書籍のISBN検索をするリクエストを作成
-    // var isbn = 9784255009056;
-    // var encode_isbn = encodeURIComponent("isbn=\""+ isbn +"\"");
-    // YQLに国会図書館APIのリクエストを肩代わりさせる
-    // var url =  "http://iss.ndl.go.jp/api/sru?operation=searchRetrieve&query=" + encode_isbn;
-    // var targetURL = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + url + '"') + '&format=xml';
-    alert("targetURL: " + targetURL);
-    $.ajax({
-      type: 'get',
-      url:  targetURL,
-      dataType: 'jsonp xml'
-   // jsonpCallback: 'callback',
-   // timeout: 5000,
-      }).done(function (data, textStatus, jqXHR) {
-        var str = data;
-     // var content = str.substr((str.indexOf('data-a-dynamic-image=')+78),39);
-     // $('#coverimg').val(content);
-        if ($('#bookname').val() == '') {
-          content = str.substr((str.indexOf('id="productTitle" class="a-size-large">')+39),100);
-          content = content.substr(0,content.indexOf('</span>'));
-          if (content.length > 50) { content = content.substr(0,50).trim(); }
-          $('#bookname').val(content);
-        }
-        if ($('#publisher').val() == '') {
-       // content = str.substr((str.indexOf('<li><b>出版社:</b> ')+16),50);
-       // content = str.substr((str.indexOf('■出版社：')+6),50);
-       // content = str.substr((str.indexOf('出版元')+4),50);
-          content = str.substr((str.indexOf('keywords')+4),50);
-       // content = content.substr(0,content.indexOf('('));
-          content = content.substr(0,content.indexOf('■'));
-          if (content.length > 25) { content = content.substr(0,25).trim(); }
-          $('#publisher').val(content);
-        }
-        if ($('#issuedate').val() == '') {
-          content = str.substr((str.indexOf('<li><b> 発売日：</b> ')+17),10);
-          content = content.replace( '</', '' );
-          content = content.replace( '<', '' );
-          $('#issuedate').val(content);
-        }
-      }).fail(function (jqXHR, textStatus, errorThrown) {
-        // 検索失敗時には、その旨をダイアログ表示
-        alert("Ajaxで失敗しました: " + textStatus + " " + errorThrown);
-        // XMLのパースエラーのためにエラーとして処理される
-        var parser = new DOMParser();
-        var dom = parser.parseFromString(jqXHR.responseJSON.results[0], 'text/xml');
-        alert($("record recordData", dom).eq(0).innerHTML);
-    })
-  };
-</script>
 </body>
-
 </html>
