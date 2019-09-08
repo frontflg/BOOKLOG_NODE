@@ -32,22 +32,22 @@
     <table class="table">
       <tr>
         <td>ISBN13：<input type="number" name="isbn13" value="9784000000000" maxlength="13" size="15" required></td>
-        <td><a href="https://www.amazon.co.jp/dp/" target="_blank">ISBN10</a>：<input type="number" name="isbn10" value="4000000000" maxlength="10" size="12"></td>
-        <td colspan="2">画像：<input type="text" name="coverimg" maxlength="41" size="49"></td></tr>
+        <td><a href="https://www.amazon.co.jp/dp/" target="_blank">ISBN10</a>：<input type="number" name="isbn10" id="isbn10" value="4000000000" maxlength="10" size="12"></td>
+        <td colspan="2"><a href="#" onclick="getImg ();">画像</a>：<input type="text" name="coverimg" id="coverimg" maxlength="41" size="49"></td></tr>
       <tr>
-        <td colspan="2">書名：<input type="text" name="bookname" maxlength="50" size="64" required></td>
+        <td colspan="2">書名：<input type="text" name="bookname" id="bookname" maxlength="50" size="64" required></td>
         <td>状況：
-          <select name="state">
+          <select name="state" id="state">
             <option value="0" selected>未読</option><option value="1">読了</option><option value="2">読書中</option>
           </select></td>
         <td rowspan="7" align="center">
           <div id="cover"></div>
         </td></tr>
       <tr>
-        <td colspan="2">著者：<input type="text" name="author" maxlength="25" size="64"></td>
-        <td>分類：<input type="text" name="genre" maxlength="25" size="14"></td></tr>
+        <td colspan="2">著者：<input type="text" name="author" id="author" maxlength="25" size="64"></td>
+        <td>分類：<input type="text" name="genre" id="genre" maxlength="25" size="14"></td></tr>
       <tr>
-        <td colspan="2">出版：<input type="text" name="publisher" maxlength="25" size="64"></td>
+        <td colspan="2">出版：<input type="text" name="publisher" id="publisher" maxlength="25" size="64"></td>
         <td>所有：<input type="radio" name="ownership" value="1" checked /> Yes&nbsp;&nbsp;
                   <input type="radio" name="ownership" value="0" /> No</td></tr>
       <tr>
@@ -55,16 +55,23 @@
         <td>入手：<input type="text" name="getdate"   id="getdate"   maxlength="10" size="11" required pattern="\d{4}/\d{2}/\d{2}" title="YYYY/MM/DD"></td>
         <td>読了：<input type="text" name="readdate"  id="readdate"  maxlength="10" size="11" pattern="\d{4}/\d{2}/\d{2}" title="YYYY/MM/DD"></td></tr>
       <tr>
-        <td colspan="2">書店：<input type="text" name="library" maxlength="25" size="64"></td>
-        <td>価格：<input type="number" name="purchase" maxlength="7" size="5" pattern="\d" title="数字" onchange="check1(this);"></td></tr>
+        <td colspan="2">書店：<input type="text" name="library" id="library" maxlength="25" size="64"></td>
+        <td>価格：<input type="number" name="purchase" id="purchase" maxlength="7" size="5" pattern="\d" title="数字" onchange="check1(this);"></td></tr>
       <tr>
-        <td colspan="4">概要：<input type="text" name="overview" maxlength="255" size="107"></td></tr>
+        <td colspan="4">概要：<input type="text" name="overview" id="overview" maxlength="255" size="107"></td></tr>
       <tr>
-        <td colspan="4">感想：<textarea name="impressions" cols="109" rows="4"></textarea></td></tr>
+        <td colspan="4">感想：<textarea name="impressions" id="impressions" cols="109" rows="4"></textarea></td></tr>
       </tr>
     </table>
     <button type="submit" name="button" class="btn btn-success">登録</button>
     <button type="button" onclick="location.href='./'" class="btn btn-warning">戻る</button>
   </form>
+  <script>
+    function getImg () {
+      if (!$('#isbn10').val()) { return; }
+      if ($('#isbn10').val() === "4000000000") { return; }
+      window.location.href = "./add2?isbn10=" + $('#isbn10').val();
+    }
+  </script>
 </body>
 </html>

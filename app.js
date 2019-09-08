@@ -1,10 +1,12 @@
 const createError = require('http-errors');
-const express = require('express');
+const express = require('express'); //expressモジュールを読み込む
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
-const app = express();
+
+const app = express(); //expressアプリを生成する
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -27,6 +29,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-app.listen(3000, () => {
-    console.log('start')
-})
+
+// ポート3000でサーバを立てる
+app.listen(3000, () => { console.log('start')});

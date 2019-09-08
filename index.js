@@ -1,5 +1,5 @@
-const express = require('express');
-const mysql = require('mysql');
+const express = require('express'); //expressモジュールを読み込む
+const mysql = require('mysql');     //mysqlモジュールを読み込む
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
 const mysql_setting = {
@@ -23,6 +23,63 @@ router.get('/', function (req, res, next) {
 //localhost:3000/add
 router.get('/add', function (req, res, next) {
   res.render('add');
+});
+//localhost:3000/add2
+router.get('/add2', function (req, res, next) {
+  const isbn10 = req.query.isbn10;
+  // ダウンロード元URLの指定
+  const url = "https://www.amazon.co.jp/dp/" + isbn10;
+  // 利用モジュールの取り込み
+  const client = require('cheerio-httpcli');
+  const param = {};
+  client.fetch(url, param, function(err, $, result) {
+    if (err) { console.log("eeror"); return; }
+    // 必要な情報を抽出・整形・表示
+    const bookTitle = $('title').text().split('|');
+    const bookname  = bookTitle[0].trim();
+    const author    = bookTitle[1].trim();
+    var publisher = "";
+    var isbn13    = "";
+    var issuedate = "";
+    $('li').each(function (idx) {
+      if ($(this).text().indexOf('出版社:') !== -1) {
+        const publish = $(this).text().trim().split(' ');
+        publisher     = publish[1];
+      } else if ($(this).text().indexOf('ISBN-13:') !== -1) {
+        const isbn_13 = $(this).text().trim().split(' ');
+        isbn13        = isbn_13[1].replace('-','');
+      } else if ($(this).text().indexOf('発売日：') !== -1) {
+        const pbdate  = $(this).text().trim().split(' ');
+        issuedate     = pbdate[1];
+        if (issuedate.substr(6,1) === "/") {
+           issuedate  = issuedate.substr(0,5) + "0" + issuedate.substr(5);
+        }
+        if (issuedate.substr(-2,1) === "/") {
+           issuedate  = issuedate.substr(0,8) + "0" + issuedate.substr(8);
+        }
+        return false;
+      }
+    });
+    var coverimg = "";
+    $('img').each(function (idx) {
+      const imgFil = $(this).attr('data-a-dynamic-image');
+      if (imgFil) {
+        const end = imgFil.indexOf('jpg') - 48;
+        coverimg = imgFil.substr(51,end);
+        return false;
+      }
+    });
+    const data = {
+          isbn13:    isbn13,
+          isbn10:    isbn10,
+          bookname:  bookname,
+          author:    author,
+          publisher: publisher,
+          coverimg:  coverimg,
+          issuedate: issuedate
+    };
+    res.render('add2', data );
+  });
 });
 //localhost:3000/addへのPOST
 router.post('/add', (req, res, next) => {
@@ -80,7 +137,6 @@ router.post('/add', (req, res, next) => {
   });
   connection.end();
 })
- 
 //localhost:3000/delete
 router.post('/delete', (req, res, next) => {
   const isbn13 = req.body.isbn13;
